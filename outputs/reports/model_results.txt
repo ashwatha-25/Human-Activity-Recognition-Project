@@ -1,0 +1,30 @@
+MODEL COMPARISON RESULTS
+============================
+
+Model      : Random Forest
+Accuracy   : 92.67%
+Precision  : 0.9279
+Recall     : 0.9267
+F1 Score   : 0.9264
+MAE        : 0.0879
+
+----------------------
+
+Model      : SVM
+Accuracy   : 95.25%
+Precision  : 0.9529
+Recall     : 0.9525
+F1 Score   : 0.9524
+MAE        : 0.0546
+
+----------------------
+
+Model      : KNN
+Accuracy   : 88.43%
+Precision  : 0.8920
+Recall     : 0.8843
+F1 Score   : 0.8834
+MAE        : 0.1371
+
+----------------------
+
