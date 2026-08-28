@@ -1,181 +1,242 @@
 import streamlit as st
-import pandas as pd
-import joblib
 
 # --------------------------------------------
-# Load Model
+# PAGE CONFIG
 # --------------------------------------------
 
-model = joblib.load(
-    "../models/best_model.pkl"
+st.set_page_config(
+    page_title="Human Activity Recognition (Target)",
+    page_icon="🏃",
+    layout="wide"
 )
 
-# --------------------------------------------
-# Load Dataset
-# --------------------------------------------
-
-df = pd.read_csv(
-    "../outputs/processed_test.csv"
-)
 
 # --------------------------------------------
-# Title
+# CUSTOM CSS
 # --------------------------------------------
 
-st.title("Human Activity Recognition System")
+st.markdown("""
+<style>
 
-st.write(
-    "Predict Human Activity Using Dataset Samples"
-)
-
-# --------------------------------------------
-# Select Sample Row
-# --------------------------------------------
-
-row_number = st.number_input(
-    "Enter Row Number",
-    min_value=0,
-    max_value=len(df)-1,
-    value=0
-)
-
-# --------------------------------------------
-# Target Column
-# --------------------------------------------
-
-target_column = "Activity"
-
-# --------------------------------------------
-# Remove Target Column
-# --------------------------------------------
-
-X = df.drop(
-    target_column,
-    axis=1
-)
-
-# --------------------------------------------
-# Get Selected Sample
-# --------------------------------------------
-
-sample = X.iloc[[row_number]]
-
-# --------------------------------------------
-# Calories Mapping
-# --------------------------------------------
-
-calorie_map = {
-
-    "Walking": 250,
-    "Walking Upstairs": 400,
-    "Walking Downstairs": 300,
-    "Sitting": 80,
-    "Standing": 100,
-    "Laying": 60
+.stApp {
+    background: linear-gradient(135deg, #fbc2eb 0%, #a18cd1 100%);
 }
 
+[data-testid="stSidebar"] {
+    background: rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(10px);
+}
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+
+/* CARD DESIGN */
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.20);
+    text-align: center;
+    min-height: 180px;
+}
+
+
+/* BUTTON DESIGN */
+
+.stButton > button {
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #6A11CB, #2575FC);
+    color: white;
+}
+
+.stButton > button:hover {
+    background: linear-gradient(90deg, #2575FC, #6A11CB);
+    color: white;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
 # --------------------------------------------
-# Prediction Button
+# HEADER
 # --------------------------------------------
 
-if st.button("Predict Activity"):
+st.markdown("""
+<div style="
+background: linear-gradient(90deg, #6A11CB, #2575FC);
+padding: 30px;
+border-radius: 20px;
+text-align: center;
+box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
+">
 
-    # ----------------------------------------
-    # Predict Activity
-    # ----------------------------------------
+<h1 style="color:white; font-size:42px;">
+PULSEWELL AI
+</h1>
 
-    prediction = model.predict(sample)
+<h3 style="color:white;">
+A SMARTPHONE SENSOR-DRIVEN WELLNESS MONITORING SYSTEM WITH ACTIVITY RECOGNITION, FALL DETECTION AND CALORIE ESTIMATION
+</h3>
 
-    # ----------------------------------------
-    # Activity Labels
-    # ----------------------------------------
+<p style="color:white; font-size:17px;">
 
-    activity_labels = {
+</p>
 
-        0: "Walking",
-        1: "Walking Upstairs",
-        2: "Walking Downstairs",
-        3: "Sitting",
-        4: "Standing",
-        5: "Laying"
-    }
+</div>
+""", unsafe_allow_html=True)
 
-    predicted_activity = activity_labels.get(
-        prediction[0],
-        prediction[0]
+st.write("")
+
+
+# --------------------------------------------
+# KPI CARDS
+# --------------------------------------------
+
+st.markdown("##  System Highlights")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+
+    st.metric(
+        " Activities",
+        "6"
     )
 
-    # ----------------------------------------
-    # Show Prediction
-    # ----------------------------------------
+with col2:
 
-    st.success(
-        f"Predicted Activity: {predicted_activity}"
+    st.metric(
+        " ML Models",
+        "3"
     )
 
-    # ----------------------------------------
-    # Actual Activity
-    # ----------------------------------------
+with col3:
 
-    actual_activity = df.iloc[row_number][target_column]
-
-    st.info(
-        f"Actual Activity Label: {actual_activity}"
+    st.metric(
+        " Best Accuracy",
+        "98%"
     )
 
-    # ----------------------------------------
-    # Fall Detection
-    # ----------------------------------------
+st.write("")
 
-    try:
 
-        acc_x = sample['tBodyAcc-mean()-X'].values[0]
-        acc_y = sample['tBodyAcc-mean()-Y'].values[0]
-        acc_z = sample['tBodyAcc-mean()-Z'].values[0]
+# ---------------------------------------------
+# ACTIVITIES
+# --------------------------------------------
 
-        magnitude = (
-            acc_x**2 +
-            acc_y**2 +
-            acc_z**2
-        ) ** 0.5
+st.markdown("##  Activities Recognized")
 
-        st.write(
-            f"Acceleration Magnitude: {magnitude:.4f}"
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.info(" WALKING")
+
+with col2:
+    st.info("⬆ WALKING UPSTAIRS")
+
+with col3:
+    st.info("⬇ WALKING DOWNSTAIRS")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.info(" SITTING")
+
+with col2:
+    st.info(" STANDING")
+
+with col3:
+    st.info(" LAYING")
+
+st.write("")
+
+
+# --------------------------------------------
+# NAVIGATION SECTION
+# --------------------------------------------
+
+st.markdown("##  Explore the System")
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    st.markdown("""
+    <div class="card">
+
+    <h2> Model Comparison</h2>
+
+    <p>
+    Compare Random Forest, SVM and KNN
+    models based on their accuracy.
+    </p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.write("")
+
+    if st.button(
+        " View Model Comparison",
+        use_container_width=True
+    ):
+
+        st.switch_page(
+            "pages/1_Model_Comparison.py"
         )
 
-        # Threshold Check
 
-        if magnitude > 0.2:
+with col2:
 
-            st.error("⚠️ Fall Detected!")
+    st.markdown("""
+    <div class="card">
 
-        else:
+    <h2> Activity Prediction</h2>
 
-            st.success("✅ No Fall Detected")
+    <p>
+    Select a smartphone sensor sample
+    and predict the human activity.
+    </p>
 
-    except:
+    </div>
+    """, unsafe_allow_html=True)
 
-        st.warning(
-            "Fall Detection Features Not Found"
+    st.write("")
+
+    if st.button(
+        " Start Activity Prediction",
+        use_container_width=True
+    ):
+
+        st.switch_page(
+            "pages/2_Prediction.py"
         )
 
-    # ----------------------------------------
-    # Calorie Estimation
-    # ----------------------------------------
-
-    estimated_calories = calorie_map.get(
-        predicted_activity,
-        0
-    )
-
-    st.info(
-        f"🔥 Estimated Calories Burned: {estimated_calories} kcal/hour"
-    )
 
 # --------------------------------------------
-# Display Sample Features
+# FOOTER
 # --------------------------------------------
 
-st.subheader("Selected Sample Features")
+st.write("")
 
-st.dataframe(sample)
+st.markdown("---")
+
+st.markdown("""
+
+<center>
+
+###  PULSEWELL AI
+
+</center>
+
+""", unsafe_allow_html=True)
